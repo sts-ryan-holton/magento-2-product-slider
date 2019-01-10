@@ -128,15 +128,22 @@ abstract class AbstractSlider extends AbstractProduct
     /**
      * @return mixed
      */
-    public function getDisplayAdditional()
-    {
-        $display = $this->getSlider()->getDisplayAdditional();
-        if (!is_array($display)) {
-            $display = explode(',', $display);
-        }
-
-        return $display;
-    }
+     public function getDisplayAdditional()
+     {
+         if($this->getSlider()) {
+             $display = $this->getSlider()->getDisplayAdditional();
+             if (!is_array($display)) {
+                 $display = explode(',', $display);
+             }
+         }
+         else{
+             $display = $this->_helperData->getModuleConfig('general/display_information');
+             if (!is_array($display)) {
+                 $display = explode(',', $display);
+             }
+         }
+         return $display;
+     }
 
     /**
      * @return bool

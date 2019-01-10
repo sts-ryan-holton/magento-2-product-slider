@@ -89,12 +89,24 @@ class CategoryId extends AbstractSlider
      *
      * @return array
      */
-    public function getProductIdsByCategory()
+     public function getProductIdsByCategory()
     {
         $productIds = [];
         $catIds     = $this->getSliderCategoryIds();
-        foreach ($catIds as $catId) {
-            $category   = $this->_categoryFactory->create()->load($catId);
+        if ($this->getSlider()) {
+            foreach ($catIds as $catId) {
+                $category   = $this->_categoryFactory->create()->load($catId);
+                $collection = $this->_productCollectionFactory->create()
+                    ->addAttributeToSelect('*')
+                    ->addCategoryFilter($category);
+
+                foreach ($collection as $item) {
+                    $productIds[] = $item->getData('entity_id');
+                }
+            }
+        }
+        if ($this->getData('category_id')) {
+            $category   = $this->_categoryFactory->create()->load($catIds);
             $collection = $this->_productCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addCategoryFilter($category);
